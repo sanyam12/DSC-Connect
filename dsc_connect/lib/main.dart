@@ -1,9 +1,7 @@
-import 'package:dsc_connect/pages/SignUpPage.dart';
 import 'package:dsc_connect/utils/Routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dsc_connect/pages/HomePage.dart';
-import 'package:dsc_connect/pages/login.dart';
-import 'dart:developer';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -14,45 +12,6 @@ void main()async{
 }
 
 
-// class MyAppp extends StatelessWidget {
-//   const MyAppp({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Text("sfddfsdf");
-//   }
-// }
-
-
-// class MyApp extends StatefulWidget {
-//   const MyApp({Key? key}) : super(key: key);
-//
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
-//
-// class _MyAppState extends State<MyApp> {
-//
-//   bool isLoggedIn() {
-//
-//     bool ans= false;
-//
-//     FirebaseAuth.instance.authStateChanges().listen((User? user ) {
-//       if(user==null)
-//         {
-//           ans = false;
-//         }else
-//           {
-//             ans = true;
-//           }
-//       });
-//
-//     return ans;
-//   }
-//
-// }
-
-//
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -64,13 +23,13 @@ class _MyAppState extends State<MyApp> {
 
   bool isLoggedIn() {
     bool ans = false;
-    // FirebaseAuth.instance.authStateChanges().listen((User? user) {
-    //   if(user!=null)
-    //   {
-    //     ans = true;
-    //   }
-    // });
-    log(ans.toString());
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if(user!=null)
+      {
+        ans = true;
+      }
+    });
+    //log(ans.toString());
     return ans;
   }
 
