@@ -1,3 +1,7 @@
+import 'dart:math';
+
+import 'package:dsc_connect/pages/SignUpPage.dart';
+import 'package:dsc_connect/pages/login.dart';
 import 'package:dsc_connect/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,34 +25,82 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  bool isLoggedIn() {
-    bool ans = false;
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if(user!=null)
-      {
-        ans = true;
-      }
+  // bool isLoggedIn() {
+  //   bool ans = false;
+  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
+  //     if(user==null)
+  //     {
+  //       log("user is currently signed out!");
+  //     }else {
+  //       log("user is currently signed in!");
+  //       ans = true;
+  //     }
+  //   });
+  //   log(ans.toString());
+  //   return ans;
+  // }
+
+  final Map<int, Color> color = {
+    50:Color.fromRGBO(4,131,184, .1),
+    100:Color.fromRGBO(4,131,184, .2),
+    200:Color.fromRGBO(4,131,184, .3),
+    300:Color.fromRGBO(4,131,184, .4),
+    400:Color.fromRGBO(4,131,184, .5),
+    500:Color.fromRGBO(4,131,184, .6),
+    600:Color.fromRGBO(4,131,184, .7),
+    700:Color.fromRGBO(4,131,184, .8),
+    800:Color.fromRGBO(4,131,184, .9),
+    900:Color.fromRGBO(4,131,184, 1),
+  };
+
+  MaterialColor generateMaterialColor(Color color) {
+    return MaterialColor(color.value, {
+      50: tintColor(color, 0.9),
+      100: tintColor(color, 0.8),
+      200: tintColor(color, 0.6),
+      300: tintColor(color, 0.4),
+      400: tintColor(color, 0.2),
+      500: color,
+      600: shadeColor(color, 0.1),
+      700: shadeColor(color, 0.2),
+      800: shadeColor(color, 0.3),
+      900: shadeColor(color, 0.4),
     });
-    //log(ans.toString());
-    return ans;
   }
+
+  int tintValue(int value, double factor) =>
+      max(0, min((value + ((255 - value) * factor)).round(), 255));
+
+  Color tintColor(Color color, double factor) => Color.fromRGBO(
+      tintValue(color.red, factor),
+      tintValue(color.green, factor),
+      tintValue(color.blue, factor),
+      1);
+
+  int shadeValue(int value, double factor) =>
+      max(0, min(value - (value * factor).round(), 255));
+
+  Color shadeColor(Color color, double factor) => Color.fromRGBO(
+      shadeValue(color.red, factor),
+      shadeValue(color.green, factor),
+      shadeValue(color.blue, factor),
+      1);
 
   @override
   Widget build(BuildContext context) {
 
-    isLoggedIn();
-
     return MaterialApp(
       title: 'DSC Connect',
       theme: ThemeData(
-        primaryColor: const Color(0xFF40d886),
+        // primarySwatch: MaterialColor(0xFF71F79F, color),
+        primarySwatch: generateMaterialColor(Color(0xFF40d886)),
         scaffoldBackgroundColor: const Color(0xFF06313F),
       ),
-      initialRoute: MyRoutes.homeRoute,
+      initialRoute: FirebaseAuth.instance.currentUser!=null? MyRoutes.homeRoute : MyRoutes.loginRoute,
       routes: {
         MyRoutes.homeRoute: (context)=>const MyHomePage(),
-        // MyRoutes.loginRoute: (context)=>const LoginPage(),
-        // MyRoutes.signupRoute: (context)=>const SignUpPage()
+        MyRoutes.loginRoute: (context)=>const LoginPage(),
+        MyRoutes.signupRoute: (context)=>const SignUpPage()
       },
     );
   }
