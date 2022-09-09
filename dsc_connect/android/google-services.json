@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "165809487820",
+    "project_id": "dsc-connect-6f139",
+    "storage_bucket": "dsc-connect-6f139.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165809487820:android:b789ec0b96ed62a13d6769",
+        "android_client_info": {
+          "package_name": "com.sanyam.dsc_connect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165809487820-84817frsoroh389spvaj5d6t3a2jhu05.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sanyam.dsc_connect",
+            "certificate_hash": "f13174fad264bc18f4372b2c446ba9af407a7296"
+          }
+        },
+        {
+          "client_id": "165809487820-u1op9to3f31nqe2k4tbo1dg5ndd79ulb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfn65ZiWk9LoX1F-c79y1TtrGbuqBw0bs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165809487820-u1op9to3f31nqe2k4tbo1dg5ndd79ulb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "165809487820-eh09tj80uq3u708d4as5ces768epdqet.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sanyam.dscConnect"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
