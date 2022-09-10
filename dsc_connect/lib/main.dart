@@ -95,6 +95,10 @@ class _MyAppState extends State<MyApp> {
         // primarySwatch: MaterialColor(0xFF71F79F, color),
         primarySwatch: generateMaterialColor(Color(0xFF40d886)),
         scaffoldBackgroundColor: const Color(0xFF06313F),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor:  Color(0xFF06313F),
+          unselectedItemColor: Colors.white
+        ),
       ),
       initialRoute: FirebaseAuth.instance.currentUser!=null? MyRoutes.homeRoute : MyRoutes.loginRoute,
       routes: {
