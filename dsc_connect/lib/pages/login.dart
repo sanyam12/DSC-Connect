@@ -29,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
             .signInWithEmailAndPassword(
                 email: emailController.text, password: passwordController.text);
 
+        if(!mounted) return;
         await Navigator.pushNamedAndRemoveUntil(
             context, MyRoutes.homeRoute, (Route<dynamic> route) => false);
       } on FirebaseAuthException catch (e) {

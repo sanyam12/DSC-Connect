@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dsc_connect/pages/SignUpPage.dart';
+import 'package:dsc_connect/pages/home/profile/edit_profile.dart';
 import 'package:dsc_connect/pages/login.dart';
 import 'package:dsc_connect/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -104,7 +105,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         MyRoutes.homeRoute: (context)=>const MyHomePage(),
         MyRoutes.loginRoute: (context)=>const LoginPage(),
-        MyRoutes.signupRoute: (context)=>const SignUpPage()
+        MyRoutes.signupRoute: (context)=>const SignUpPage(),
+        MyRoutes.editProfile: (context)=>const EditProfile()
       },
     );
   }
