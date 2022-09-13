@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/Routes.dart';
@@ -16,7 +17,10 @@ class _EditProfileState extends State<EditProfile> {
   final _phoneNumberController = TextEditingController();
   final _aboutController = TextEditingController();
   final _formState = GlobalKey<FormState>();
+  final uid = FirebaseAuth.instance.currentUser!.uid;
   int length = 200;
+  final FirebaseFirestore db =  FirebaseFirestore.instance;
+
 
   @override
   void dispose() {
@@ -122,15 +126,47 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                     ElevatedButton(
-                        onPressed: () {
-                          _formState.currentState!.validate();
-                        },
+                        onPressed: submitOnPressed,
                         child: const Text("Submit")
                     )
                   ],
                 ))
           ],
         ));
+  }
+
+
+
+  submitOnPressed() async{
+    _formState.currentState!.validate();
+    Map<String, dynamic> map = <String, dynamic>{
+      "about":_aboutController.text,
+      "username":_usernameController.text,
+      "phone number": _phoneNumberController.text
+    };
+
+    var doc = await db.collection("users")
+        .doc(uid)
+        .get();
+
+    if(doc.exists)
+      {
+        db.collection("users")
+            .doc(uid)
+            .update(map)
+            .then((value) {
+              log("doc found, updating to doc");
+              Navigator.pop(context);
+            });
+      }else{
+        db.collection("users")
+            .doc(uid)
+            .set(map)
+            .then((value) {
+              log("doc not found, adding new doc");
+              Navigator.pop(context);
+            });
+    }
   }
 }
 

@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("DSC Connect"),
+        title: const Text("DSC Connect", style: TextStyle(fontWeight: FontWeight.bold),),
       ),
 
       body: _widgetOptions.elementAt(_selectedIndex),
