@@ -1,6 +1,7 @@
 import 'package:dsc_connect/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'dart:developer';
 
@@ -17,29 +18,33 @@ class _LoginPageState extends State<LoginPage> {
   loginFun(BuildContext context, TextEditingController emailController,
       TextEditingController passwordController) async {
     if (_formKey.currentState!.validate()) {
-      setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Processing Your Request")));
-      });
+      EasyLoading.show(status: "Attempting login");
 
       // log((FirebaseAuth.instance.currentUser == null).toString());
 
       try {
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-                email: emailController.text, password: passwordController.text);
+                email: emailController.text.trim(),
+            password: passwordController.text
+        );
 
+        EasyLoading.dismiss();
         if(!mounted) return;
         await Navigator.pushNamedAndRemoveUntil(
             context, MyRoutes.homeRoute, (Route<dynamic> route) => false);
       } on FirebaseAuthException catch (e) {
         log("An exception in login occurred!!");
-
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(content: Text(e.message.toString()));
-            });
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       EasyLoading.dismiss();
+        //       return AlertDialog(content: Text(e.message.toString()));
+        //     });
+        EasyLoading.dismiss();
+        EasyLoading.showError(e.message.toString());
+        Future.delayed(const Duration(seconds: 6));
+        EasyLoading.dismiss();
       }
     }
   }

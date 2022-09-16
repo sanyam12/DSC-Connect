@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dsc_connect/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -19,36 +20,57 @@ class _ProfilePageState extends State<ProfilePage> {
   // late DocumentSnapshot<Map<String, dynamic>> data;
   bool isDataLoaded = false;
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData() async {
-    log("now getting data from servers!");
-    return await db.collection("users").doc(uid).get();
+  Future<DocumentSnapshot<Map<String, dynamic>>?> getUserData() async {
+    // log("now getting data from servers!");
+    var doc = await db.collection("users").doc(uid).get();
+    if (doc.exists) {
+      return doc;
+    } else {
+      return null;
+    }
   }
 
-  late DocumentSnapshot<Map<String, dynamic>> data;
+  @override
+  void initState() {
+    EasyLoading.show(status: "Loading...");
+    super.initState();
+  }
+
+  late DocumentSnapshot<Map<String, dynamic>>? data;
 
   @override
   Widget build(BuildContext context) {
     // getUserData();
     // log(data["user"]);
 
-    if(!isDataLoaded)
-      {
-        getUserData().then((value) {
+    if (!isDataLoaded) {
+      getUserData().then((value) {
+        if (value != null) {
           data = value;
-          isDataLoaded = true;
-          setState(() {});
-        });
-      }
+        } else {
+          data = null;
+          EasyLoading.dismiss();
+          Navigator.pushNamedAndRemoveUntil(
+              context, MyRoutes.detailsPage, (route) => false);
+        }
+        isDataLoaded = true;
+        setState(() {});
+      });
+    }
 
     if (!isDataLoaded) {
+      // EasyLoading.show(status: "Loading...");
       return const Text(
         "Still Loading data",
         style: TextStyle(color: Colors.white),
       );
-    } else if(FirebaseAuth.instance.currentUser==null) {
-      Navigator.pushNamedAndRemoveUntil(context, MyRoutes.loginRoute, (route) => false);
+    } else if (FirebaseAuth.instance.currentUser == null) {
+      EasyLoading.dismiss();
+      Navigator.pushNamedAndRemoveUntil(
+          context, MyRoutes.loginRoute, (route) => false);
       return const Text("You are not Logged in!");
-    }else {
+    } else {
+      EasyLoading.dismiss();
       return SizedBox(
         width: double.infinity,
         child: Column(
@@ -60,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                data["username"],
+                data != null ? data!["username"] : "Username",
                 style: const TextStyle(
                     fontSize: 21,
                     color: Colors.white,
@@ -70,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 1.0, 0, 0),
               child: Text(
-                data["phone number"],
+                data != null ? data!["phone number"] : "phone number",
                 style: const TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
@@ -91,11 +113,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         Expanded(
                           child: Text(
-                            data["about"],
+                            data != null ? data!["about"] : "User's About here",
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             softWrap: false,
-                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18),
                           ),
                         ),
                       ],
@@ -114,10 +137,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         Expanded(
                           child: Text(
-                            FirebaseAuth.instance.currentUser!.email!.toString(),
+                            FirebaseAuth.instance.currentUser!.email!
+                                .toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 18),
                           ),
                         ),
                       ],
@@ -129,31 +154,44 @@ class _ProfilePageState extends State<ProfilePage> {
                           context,
                           "Manage Social Media links",
                           const Icon(Icons.arrow_back, color: Colors.white),
-                          () {}),
+                          () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Implementation Pending")));
+                      }),
                       ProfilePageButtons().build(
                           context,
                           "Terms and Conditions",
                           const Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                          ),
-                          () {}),
+                          ), () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Implementation Pending")));
+                      }),
                       ProfilePageButtons().build(
                           context,
                           "Contact Us",
                           const Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                          ),
-                          () {}),
+                          ), () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Implementation Pending")));
+                      }),
                       ProfilePageButtons().build(
                           context,
                           "Change Password",
                           const Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                          ),
-                          () {}),
+                          ), () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Implementation Pending")));
+                      }),
                       ProfilePageButtons().build(
                           context,
                           "Log Out",
@@ -161,9 +199,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             Icons.arrow_back,
                             color: Colors.white,
                           ), () async {
-                        await FirebaseAuth.instance.signOut().then((value) =>
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                MyRoutes.loginRoute, (route) => false));
+                        await FirebaseAuth.instance.signOut().then((value) {
+                          EasyLoading.dismiss();
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              MyRoutes.loginRoute, (route) => false);
+                        });
                       }),
                     ],
                   )
@@ -242,7 +282,7 @@ class ProfilePic extends StatelessWidget {
                               side: BorderSide(
                                   color: Color(0xFF06313F), width: 4)),
                           minimumSize: const Size(50, 50)),
-                      child: icon),
+                      child: const Text("Edit")),
                 ],
               ),
             ],

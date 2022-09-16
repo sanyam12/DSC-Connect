@@ -1,13 +1,18 @@
 import 'dart:math';
 
 import 'package:dsc_connect/pages/SignUpPage.dart';
+import 'package:dsc_connect/pages/details_page.dart';
+import 'package:dsc_connect/pages/home/announcements/about_announcements.dart';
+import 'package:dsc_connect/pages/home/announcements/new_announcements.dart';
 import 'package:dsc_connect/pages/home/profile/edit_profile.dart';
+import 'package:dsc_connect/pages/home/query/new_query.dart';
 import 'package:dsc_connect/pages/login.dart';
 import 'package:dsc_connect/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dsc_connect/pages/HomePage.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'firebase_options.dart';
 
 void main()async{
@@ -92,6 +97,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       title: 'DSC Connect',
+      builder: EasyLoading.init(),
       theme: ThemeData(
         // primarySwatch: MaterialColor(0xFF71F79F, color),
         primarySwatch: generateMaterialColor(Color(0xFF40d886)),
@@ -106,7 +112,10 @@ class _MyAppState extends State<MyApp> {
         MyRoutes.homeRoute: (context)=>const MyHomePage(),
         MyRoutes.loginRoute: (context)=>const LoginPage(),
         MyRoutes.signupRoute: (context)=>const SignUpPage(),
-        MyRoutes.editProfile: (context)=>const EditProfile()
+        MyRoutes.editProfile: (context)=>const EditProfile(),
+        MyRoutes.detailsPage: (context)=>const DetailsPage(),
+        MyRoutes.newAnnouncementPage: (context)=>const NewAnnouncement(),
+        MyRoutes.newQueryPage: (context)=>const NewQueryPage()
       },
     );
   }

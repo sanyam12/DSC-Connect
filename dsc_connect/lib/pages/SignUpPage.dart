@@ -1,6 +1,7 @@
 import 'package:dsc_connect/utils/Routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'dart:developer';
 
@@ -18,27 +19,31 @@ class _SignUpPageState extends State<SignUpPage> {
       TextEditingController _passwordController,
       TextEditingController _fullNameController) async {
     if (_formKey.currentState!.validate()) {
-
-      setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Processing Your Request")));
-      });
-
+      EasyLoading.show(status: "Registering...");
       try {
         final credentials = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
-                email: _emailController.text,
-                password: _passwordController.text);
+                email: _emailController.text.trim(),
+                password: _passwordController.text
+        );
 
-        await Navigator.pushNamedAndRemoveUntil(context, MyRoutes.homeRoute, (route) => false);
+        EasyLoading.dismiss();
+        if(!mounted) return;
+        await Navigator.pushNamedAndRemoveUntil(context, MyRoutes.detailsPage, (route) => false);
       } on FirebaseAuthException catch (e) {
         log("An exception in signup occurred!!");
 
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(content: Text(e.message.toString()));
-            });
+        EasyLoading.dismiss();
+        EasyLoading.showError(e.message.toString());
+        Future.delayed(const Duration(seconds: 5));
+        EasyLoading.dismiss();
+
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       EasyLoading.dismiss();
+        //       return AlertDialog(content: Text(e.message.toString()));
+        //     });
       }
     }
   }
@@ -89,30 +94,30 @@ class _SignUpPageState extends State<SignUpPage> {
                 "Hey There... $name",
                 style: const TextStyle(color: Colors.white, fontSize: 20),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(18.0, 38, 18, 0),
-                child: TextFormField(
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    hintText: "Enter Full Name",
-                    labelStyle: TextStyle(color: Colors.white, fontSize: 18),
-                    hintStyle: TextStyle(color: Colors.white, fontSize: 18),
-                    errorStyle: TextStyle(color: Color(0xFFF7D9D9), fontSize: 16),
-                    label: Text("Full Name"),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Enter Name";
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    name = value;
-                    setState(() {});
-                  },
-                  controller: _fullNameController,
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(18.0, 38, 18, 0),
+              //   child: TextFormField(
+              //     style: const TextStyle(color: Colors.white),
+              //     decoration: const InputDecoration(
+              //       hintText: "Enter Full Name",
+              //       labelStyle: TextStyle(color: Colors.white, fontSize: 18),
+              //       hintStyle: TextStyle(color: Colors.white, fontSize: 18),
+              //       errorStyle: TextStyle(color: Color(0xFFF7D9D9), fontSize: 16),
+              //       label: Text("Full Name"),
+              //     ),
+              //     validator: (value) {
+              //       if (value == null || value.isEmpty) {
+              //         return "Enter Name";
+              //       }
+              //       return null;
+              //     },
+              //     onChanged: (value) {
+              //       name = value;
+              //       setState(() {});
+              //     },
+              //     controller: _fullNameController,
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 10),
                 child: TextFormField(
@@ -128,7 +133,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     if (value == null || value.isEmpty) {
                       return "Enter Email";
                     } else {
-                      if (!value.contains("@")) {
+                      value = value.trim();
+                      if (!(value.contains("@")&& value.contains("."))) {
                         return "Enter valid Mail address";
                       }
                     }
