@@ -97,3 +97,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_icons:
+  android: true
+  ios: true
+  image_path_android: "assets/icon/gdsc.png"
+  image_path_ios: "assets/icon/gdsc.png"
+  min_sdk_android: 21
