@@ -1,4 +1,4 @@
-# dsc_connect
+# DSC Connect
 
 DSC Connect is a one stop application to get yourself up-to-date about the latest news and announcements made by DSC group. Moreover, users can interact with each other and resolve each other's queries.
 
