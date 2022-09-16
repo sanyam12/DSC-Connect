@@ -6,4 +6,5 @@ class MyRoutes{
   static String detailsPage = "/signup/details";
   static String newAnnouncementPage = "/home/announcements/new";
   static String newQueryPage = "/home/query/new";
+  static String newReplyPage = "/query/aboutQuery/newReply";
 }
