@@ -13,4 +13,4 @@ DSC Connect is a one stop application to get yourself up-to-date about the lates
 <b><a href="https://drive.google.com/file/d/11ez6OerCmbpYWQDwQnCsz0cjywSoP3Ue/view?usp=sharing">App link</a></b>
 
 <br>
-<img width="559" alt="sampleimages" src = https://github.com/sanyam12/DSC-Connectblob/master/dsc_connect_pic.png>
+<img width="559" alt="sampleimages" src = https://github.com/sanyam12/DSC-Connectblob/master/dsc-connect-pic.png>
