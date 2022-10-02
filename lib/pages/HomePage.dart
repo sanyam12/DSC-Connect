@@ -48,7 +48,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("DSC Connect", style: TextStyle(fontWeight: FontWeight.bold),),
+        title: const Text(
+          "DSC Connect",
+          style: TextStyle(
+              fontWeight: FontWeight.bold
+          ),
+        ),
       ),
 
       body: _widgetOptions.elementAt(_selectedIndex),
